@@ -35,6 +35,7 @@
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.cmbElementos = new System.Windows.Forms.ComboBox();
+            this.btnBorrar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbllTitulo
@@ -62,7 +63,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtxtPasta.Location = new System.Drawing.Point(6, 90);
             this.rtxtPasta.Name = "rtxtPasta";
-            this.rtxtPasta.Size = new System.Drawing.Size(326, 89);
+            this.rtxtPasta.Size = new System.Drawing.Size(382, 89);
             this.rtxtPasta.TabIndex = 4;
             this.rtxtPasta.Text = "";
             // 
@@ -71,12 +72,11 @@
             this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNombre.Location = new System.Drawing.Point(62, 48);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(270, 20);
+            this.txtNombre.Size = new System.Drawing.Size(326, 20);
             this.txtNombre.TabIndex = 2;
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGuardar.Image = global::CPR.Properties.Resources.disk_blue;
             this.btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnGuardar.Location = new System.Drawing.Point(6, 6);
@@ -90,19 +90,35 @@
             // 
             // cmbElementos
             // 
+            this.cmbElementos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbElementos.FormattingEnabled = true;
-            this.cmbElementos.Location = new System.Drawing.Point(100, 6);
+            this.cmbElementos.Location = new System.Drawing.Point(156, 6);
             this.cmbElementos.Name = "cmbElementos";
             this.cmbElementos.Size = new System.Drawing.Size(232, 21);
             this.cmbElementos.TabIndex = 0;
             this.cmbElementos.Visible = false;
             this.cmbElementos.SelectedIndexChanged += new System.EventHandler(this.cmbElementos_SelectedIndexChanged);
             // 
+            // btnBorrar
+            // 
+            this.btnBorrar.Image = global::CPR.Properties.Resources.garbage;
+            this.btnBorrar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBorrar.Location = new System.Drawing.Point(87, 6);
+            this.btnBorrar.Name = "btnBorrar";
+            this.btnBorrar.Size = new System.Drawing.Size(63, 23);
+            this.btnBorrar.TabIndex = 6;
+            this.btnBorrar.Text = "Borrar";
+            this.btnBorrar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnBorrar.UseVisualStyleBackColor = true;
+            this.btnBorrar.Visible = false;
+            this.btnBorrar.Click += new System.EventHandler(this.btnBorrar_Click);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(344, 181);
+            this.ClientSize = new System.Drawing.Size(400, 181);
+            this.Controls.Add(this.btnBorrar);
             this.Controls.Add(this.cmbElementos);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.txtNombre);
@@ -112,7 +128,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(320, 220);
+            this.MinimumSize = new System.Drawing.Size(360, 220);
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Añadir nuevo";
@@ -130,6 +146,7 @@
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.ComboBox cmbElementos;
+        private System.Windows.Forms.Button btnBorrar;
     }
 }
 

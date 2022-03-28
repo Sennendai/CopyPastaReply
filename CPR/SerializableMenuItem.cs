@@ -7,15 +7,22 @@ namespace CPR
     [Serializable]
    public class SerializableMenuItem 
     {
+        [XmlElement("Identifier")]
+        public Guid Identifier { get; set; }
         [XmlElement("copyPasta")]
-        public string copyPasta;
+        public string copyPasta { get; set; }
 
         [XmlElement("titulo")]
-        public string titulo;
+        public string titulo { get; set; }
 
         public SerializableMenuItem()
         {
             
+        }
+
+        public SerializableMenuItem(Guid guid)
+        {
+            this.Identifier = guid;
         }
 
         public SerializableMenuItem(string titulo, string texto)

@@ -9,9 +9,17 @@ namespace CPR
 {
     public partial class Principal : Form
     {
+        #region· VARIABLES
+
+        private int lastSelectedIndex = -1;
+        bool editar;
         List<SerializableMenuItem> elementos = new List<SerializableMenuItem>();
         BindingList<SerializableMenuItem> elementosComboBox = new BindingList<SerializableMenuItem>();
+        SerializableMenuItem actualElemento;
 
+        #endregion
+
+        #region· CONSTRUCTORES
         public Principal()
         {
             InitializeComponent();
@@ -25,23 +33,13 @@ namespace CPR
             Posicionarventana();
             CargarElementos();
             CargarBindingList();
-            
-            cmbElementos.DataSource = elementosComboBox;
-            cmbElementos.DisplayMember = nameof(SerializableMenuItem.titulo);
-            if (elementosComboBox.Count != 0) cmbElementos.SelectedItem = elementosComboBox.FirstOrDefault();
-            cmbElementos.Visible = editar;
+
+            this.editar = editar;
         }
 
-        public Principal(cprMenuItem menuItem)
-        {
-            InitializeComponent();
-            Posicionarventana();
-            CargarElementos();
+        #endregion
 
-            txtNombre.Text = menuItem.titulo;
-            rtxtPasta.Text = menuItem.copyPasta;
-        }
-
+        #region· FUNCIONES
         private void Posicionarventana()
         {
             int ejeX = MousePosition.X - this.Width;
@@ -52,27 +50,89 @@ namespace CPR
 
         private void CargarElementos()
         {
+            elementos = new List<SerializableMenuItem>();
             elementos = Utilidades.UtilidadesGenerales.CargarDocumento(elementos);        
         }
 
         private void CargarBindingList()
         {
+            elementosComboBox = new BindingList<SerializableMenuItem>();
             foreach (var elemento in elementos)
             {
                 elementosComboBox.Add(elemento);
             }
+
+            ActualizarComboElemento();
+
+            if (elementosComboBox.Count != 0)
+            {
+                cmbElementos.SelectedItem = elementosComboBox.FirstOrDefault();
+            }
+            cmbElementos.Visible = true;
+            btnBorrar.Visible = true;
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private bool ComprobrarNombre()
         {
-            SerializableMenuItem elemento = new SerializableMenuItem();
-            elemento.titulo = txtNombre.Text;
-            elemento.copyPasta = rtxtPasta.Text;
+            foreach (var elemento in elementos)
+            {
+                if (elemento.titulo == actualElemento.titulo) return false;
+            }
 
-            elementos.Add(elemento);
+            return true;
+        }
+
+        private void BorrarElemento()
+        {
+            SerializableMenuItem elementoABorrar = new SerializableMenuItem();
+            foreach (var elemento in elementos)
+            {
+                if (elemento.Identifier == actualElemento.Identifier)
+                {
+                    elementoABorrar = elemento;                  
+                }
+            }
+
+            if (elementoABorrar.Identifier != null) elementos.Remove(elementoABorrar);
 
             Utilidades.UtilidadesGenerales.GuardarDocumento(elementos);
-            this.Close();
+            CargarElementos();
+            CargarBindingList();
+        }
+
+        private void ActualizarComboElemento()
+        {
+            cmbElementos.DataSource = null;
+            cmbElementos.DisplayMember = nameof(SerializableMenuItem.titulo);
+            cmbElementos.DataSource = elementosComboBox;
+        }
+
+        #endregion
+
+        #region· EVENTOS
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            if (!editar && ComprobrarNombre())
+            {
+                Guid guid = Guid.NewGuid();
+                SerializableMenuItem elemento = new SerializableMenuItem(guid);
+                elemento.titulo = txtNombre.Text;
+                elemento.copyPasta = rtxtPasta.Text;
+
+                elementos.Add(elemento);                               
+            }
+            else
+            {
+                if (elementos.Count()!= 0)
+                {
+                    SerializableMenuItem elementoModificado = elementos.Where(x => x.Identifier == actualElemento.Identifier).FirstOrDefault();
+                    elementoModificado.titulo = txtNombre.Text;
+                    elementoModificado.copyPasta = rtxtPasta.Text;
+                }                    
+            }
+
+            Utilidades.UtilidadesGenerales.GuardarDocumento(elementos);
+            //this.Close();
         }
 
         private void Principal_FormClosing(object sender, FormClosingEventArgs e)
@@ -82,7 +142,21 @@ namespace CPR
 
         private void cmbElementos_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (cmbElementos.SelectedIndex != lastSelectedIndex && cmbElementos.SelectedItem != null)
+            {
+                lastSelectedIndex = cmbElementos.SelectedIndex;
+                actualElemento = (SerializableMenuItem)cmbElementos.SelectedItem;
+                txtNombre.Text = actualElemento.titulo;
+                rtxtPasta.Text = actualElemento.copyPasta;
+            }
         }
+
+        private void btnBorrar_Click(object sender, EventArgs e)
+        {
+            if (elementos.Count() != 0) BorrarElemento();
+        }
+
+        #endregion
+
     }
 }

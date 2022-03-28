@@ -1,7 +1,6 @@
 ﻿using CPR.Properties;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -19,71 +18,44 @@ namespace CPR
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            NotifyIcon icon = new NotifyIcon(new System.ComponentModel.Container())
+            notifyIcon = new NotifyIcon(new System.ComponentModel.Container())
             {
                 Icon = Resources.clipboard,
                 Text = "CopyPasteReply",
-                ContextMenu = AsignarContextMenu(),
-                //ContextMenuStrip = AsignarContextMenu();
+                ContextMenuStrip = AsignarContextMenu(),
                 Visible = true
             };
 
-            notifyIcon = icon;
             Application.Run();
-
             Application.ApplicationExit += (s, e) => RefreshTrayArea();
         }
 
-        private static ContextMenu AsignarContextMenu()
+        private static ContextMenuStrip AsignarContextMenu()
         {
-            MenuItem verticalBar = new MenuItem() { BarBreak = true };
-
-            // esto te genera automaticamente una barra horizontal que ocupa todo el ancho
-            MenuItem horizontalBar = new MenuItem("-");
-
             List<SerializableMenuItem> elementos = new List<SerializableMenuItem>();
             elementos = Utilidades.UtilidadesGenerales.CargarDocumento(elementos);
 
-            ContextMenu menu = new ContextMenu();
+            ContextMenuStrip menu = new ContextMenuStrip();
 
             foreach (var elemento in elementos)
-            {
-                //cprMenuItem elementoCPR = new cprMenuItem { Name = elemento.titulo, titulo = elemento.titulo, copyPasta = elemento.copyPasta };
-                //elementoCPR.Click += (s, e) => CopiarTexto(elemento.copyPasta);
-                //elementoCPR.MenuItems.Add(new MenuItem("Editar", (s, e) => { new Principal(elementoCPR).Show(); }));
-                //menu.MenuItems.Add(elementoCPR);                
-                menu.MenuItems.Add(new MenuItem(elemento.titulo, (s, e) => CopiarTexto(elemento.copyPasta)));
+            {              
+                ToolStripMenuItem item = new ToolStripMenuItem(elemento.titulo, Resources.clipboard1, (s, e) => CopiarTexto(elemento.copyPasta));
+                // Para añadir un desplegable a la derecha de cada elemento, queda feo
+                //item.DropDownItems.Add(new ToolStripMenuItem("Editar", Resources.edit, (s, e) => { new Principal(true).Show(); }));
+                menu.Items.Add(item);
             }
 
-            MenuItem nuevoElemento = new MenuItem("Nuevo", (s, e) => { new Principal().Show(); }) { OwnerDraw = true }; 
-            nuevoElemento.DrawItem += new DrawItemEventHandler(DrawCustomMenuItem);
-
-            MenuItem editar =  new MenuItem("Editar", (s, e) => { new Principal(true).Show(); });
-            MenuItem salir = new MenuItem("Salir", (s, e) => { Application.Exit(); });
-
-            menu.MenuItems.AddRange( new MenuItem[]
-            {
-                horizontalBar,
-                nuevoElemento,
-                editar,
-                salir
-            });
+            menu.Items.Add(new ToolStripSeparator());
+            menu.Items.Add(new ToolStripMenuItem("Nuevo", Resources.add, (s, e) => { new Principal().Show(); }));
+            menu.Items.Add(new ToolStripMenuItem("Editar", Resources.edit, (s, e) => { new Principal(true).Show(); }));
+            menu.Items.Add(new ToolStripMenuItem("Salir",Resources.exit, (s, e) => { Application.Exit(); }));
 
             return menu;
         }
 
-        private static void DrawCustomMenuItem(object sender, DrawItemEventArgs e)
-        {
-            MenuItem customItem = (MenuItem)sender;
-
-            var rect = new Rectangle(e.Bounds.X, e.Bounds.Y, (int)(Resources.add.Width), (int)(Resources.add.Height));
-            //height 0....
-            e.Graphics.DrawImage(Resources.add, rect);
-        }
-
         public static void RefrescarNotifyIcon()
         {
-            notifyIcon.ContextMenu = AsignarContextMenu();
+            notifyIcon.ContextMenuStrip = AsignarContextMenu();
         }
 
         private static void CopiarTexto(string text)
@@ -92,7 +64,8 @@ namespace CPR
         }
 
         // TODO: Analizar este codigo, copiado de http://maruf-dotnetdeveloper.blogspot.com/2012/08/c-refreshing-system-tray-icon.html
-        // Se supone que debería de solucionar el bug de que se quede el icono en la barra de abajo pero no funciona
+        // Se supone que debería de solucionar el bug de que se quede el icono en la barra de abajo cuando se cierra la aplicacion
+        // pero no funciona
         #region "Refresh Notification Area Icons"
 
         [StructLayout(LayoutKind.Sequential)]
