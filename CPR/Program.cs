@@ -38,9 +38,9 @@ namespace CPR
             ContextMenuStrip menu = new ContextMenuStrip();
 
             foreach (var elemento in elementos)
-            {              
+            {
                 ToolStripMenuItem item = new ToolStripMenuItem(elemento.titulo, Resources.clipboard1, (s, e) => CopiarTexto(elemento.copyPasta));
-                // Para añadir un desplegable a la derecha de cada elemento, queda feo
+                // Para añadir un desplegable a la derecha de cada elemento pero queda feo
                 //item.DropDownItems.Add(new ToolStripMenuItem("Editar", Resources.edit, (s, e) => { new Principal(true).Show(); }));
                 menu.Items.Add(item);
             }
@@ -48,7 +48,7 @@ namespace CPR
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add(new ToolStripMenuItem("Nuevo", Resources.add, (s, e) => { new Principal().Show(); }));
             menu.Items.Add(new ToolStripMenuItem("Editar", Resources.edit, (s, e) => { new Principal(true).Show(); }));
-            menu.Items.Add(new ToolStripMenuItem("Salir",Resources.exit, (s, e) => { Application.Exit(); }));
+            menu.Items.Add(new ToolStripMenuItem("Salir", Resources.exit, (s, e) => { Application.Exit(); }));
 
             return menu;
         }

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace CPR
 {
     [Serializable]
-   public class SerializableMenuItem 
+    public class SerializableMenuItem
     {
         [XmlElement("Identifier")]
         public Guid Identifier { get; set; }
@@ -17,7 +16,7 @@ namespace CPR
 
         public SerializableMenuItem()
         {
-            
+
         }
 
         public SerializableMenuItem(Guid guid)

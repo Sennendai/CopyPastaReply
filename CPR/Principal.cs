@@ -51,7 +51,7 @@ namespace CPR
         private void CargarElementos()
         {
             elementos = new List<SerializableMenuItem>();
-            elementos = Utilidades.UtilidadesGenerales.CargarDocumento(elementos);        
+            elementos = Utilidades.UtilidadesGenerales.CargarDocumento(elementos);
         }
 
         private void CargarBindingList()
@@ -76,7 +76,8 @@ namespace CPR
         {
             foreach (var elemento in elementos)
             {
-                if (elemento.titulo == actualElemento.titulo) return false;
+                if (elemento.titulo == actualElemento?.titulo || elemento.titulo == txtNombre.Text)
+                    return false;
             }
 
             return true;
@@ -89,7 +90,7 @@ namespace CPR
             {
                 if (elemento.Identifier == actualElemento.Identifier)
                 {
-                    elementoABorrar = elemento;                  
+                    elementoABorrar = elemento;
                 }
             }
 
@@ -119,16 +120,19 @@ namespace CPR
                 elemento.titulo = txtNombre.Text;
                 elemento.copyPasta = rtxtPasta.Text;
 
-                elementos.Add(elemento);                               
+                elementos.Add(elemento);
             }
             else
             {
-                if (elementos.Count()!= 0)
+                if (elementos.Count() != 0)
                 {
-                    SerializableMenuItem elementoModificado = elementos.Where(x => x.Identifier == actualElemento.Identifier).FirstOrDefault();
-                    elementoModificado.titulo = txtNombre.Text;
-                    elementoModificado.copyPasta = rtxtPasta.Text;
-                }                    
+                    SerializableMenuItem elementoModificado = elementos.Where(x => x.Identifier == actualElemento?.Identifier).FirstOrDefault();
+                    if (elementoModificado != null)
+                    {
+                        elementoModificado.titulo = txtNombre.Text;
+                        elementoModificado.copyPasta = rtxtPasta.Text;
+                    }
+                }
             }
 
             Utilidades.UtilidadesGenerales.GuardarDocumento(elementos);
