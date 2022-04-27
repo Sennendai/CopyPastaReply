@@ -121,6 +121,8 @@ namespace CPR
                 elemento.copyPasta = rtxtPasta.Text;
 
                 elementos.Add(elemento);
+
+                this.Close();
             }
             else
             {
